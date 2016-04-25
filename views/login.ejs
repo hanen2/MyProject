@@ -1,0 +1,58 @@
+<% if (req.session.user) { res.redirect('/welcome') ; } else {%>
+<!DOCTYPE html>
+<html>
+  
+<head>
+  <title>ZetaCos</title>
+    <meta charset="utf-8">
+    <link href="css/style.css" rel='stylesheet' type='text/css' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!--webfonts-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:600italic,400,300,600,700' rel='stylesheet' type='text/css'>
+    <!--//webfonts-->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--STYLES-->
+  
+    <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body class="body-back">
+
+  
+         <!-----start-main---->
+        <div class="login-form">
+          <div class="head">
+            <img src="images/z.png" alt=""/>
+            
+          </div>
+
+        <form action="/login" method="POST">
+
+          <li>
+      <input type="text" name="username" class="text"  placeholder="USERNAME" ><a href="#" class=" icon user"></a>
+          </li>
+          <li>
+            <input type="password" name="password" placeholder="PASSWORD" ><a href="#" class=" icon lock"></a>
+          </li>
+          <div class="p-container">
+                <label class="checkbox"><a href="/signup">SIGN UP ? </a></label>
+
+                <input type="submit" onclick="myFunction()" value="SIGN IN" />
+             
+          </div>
+        </form>
+      </div>
+      <!--//End-login-form-->
+      <!-----start-copyright---->
+            <div class="website">
+           
+          </div>
+        <!-----//end-copyright---->
+  <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/index.js"></script>
+        
+</body>
+</html>
+<%}  %>

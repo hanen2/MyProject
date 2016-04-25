@@ -1,0 +1,30 @@
+
+
+ 
+
+       <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s1">
+            <h3><span class="pull-left">Chat</span><a href="javascript:void(0);" class="pull-right" id="closeRight"><i class="fa fa-times"></i></a></h3>
+
+
+
+hhhhhhhhhhhhhhhhhhhhhhhhhhh
+ 
+
+
+
+    <% _.each(users,function(user) { %>
+      <a href="javascript:void(0);" class="showRight2"><img src="/images/avatar2.png" alt=""><span><%=user.FirstName %> <%= user.LastName %>  <small><% if (user.onLine) {%> connecté <%} else { %> non connecté <%}%></small></span></a> 
+      <% }) ;%>
+
+    
+
+
+
+        </nav>
+
+
+
+
+
+
+
