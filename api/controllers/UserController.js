@@ -9,59 +9,44 @@ module.exports = {
 
 
 
-  /**
-   * `UserController.login()`
-   */
-  login: function (req, res) {
+    index: function(req, res, next) {
 
-    return res.logg({
-      email: req.param('email'),
-      password: req.param('password'),
-      successRedirect: '/welcome',
-      invalidRedirect: '/'
+    // Get an array of all users in the User collection(e.g. table)
+    User.find(function foundUsers(err, users) {
+      if (err) return next(err);
+      // pass the array down to the /views/index.ejs page
+      res.view({
+        users: users
+      });
     });
   },
-
-  /**
-   * `UserController.logout()`
-   */
-  logout: function (req, res) {
-   
-  
-  User.changeEtatToFalse(req.session.user.id);
-
- req.session.user = null;
-
-    return res.redirect('/');
-  },
-
-
-  /**
-   * `UserController.signup()`
-   */
   signup: function (req, res) {
 
     // Attempt to signup a user using the provided parameters
-    User.signup({
+    var data = {
     
       email: req.param('email'),
       password: req.param('password'),
       FirstName: req.param('FirstName'),
       LastName: req.param('LastName'),
+      username: req.param('username'),
     
  
-    }, function (err, user) {
+    };
+    User.signup(data,function (err, user) {
    
-      if (err) return res.negotiate(err);
+      if (err) {
+        return res.negotiate(err);
 
- 
-      req.session.user = user;
-
-       User.changeEtatToTrue(req.session.user.id);
+       console.log( "rrrr"  );
+      }
+     
       if (req.wantsJSON) {
         return res.ok('Signup successful!');
       }
-
+      req.session.success ='Signup successful!';
+     console.log( user  );
+    
       return res.redirect('/');
     });
   },
@@ -145,14 +130,16 @@ load: function (req, res){
 
 update: function (req, res) {
 
- User.update({id: req.session.user.id},{
+ User.edit({
+      idUser : req.session.user.id,
       email: req.param('exampleInputEmail'),
       password: req.param('exampleInputPassword1'),
       FirstName: req.param('FirstName'),
       LastName: req.param('LastName'),
+      username: req.param('username'),
       job: req.param('job'),
       phone: req.param('phone'),
-      soc: req.param('soc'),
+      soc: req.param('soc')
       
 
     }, function(err, users) {
@@ -161,14 +148,14 @@ update: function (req, res) {
                  return console.log(err);
               
                       } else {
-                      
-                         console.log("Users updated:", users);
+                  
+                           console.log("Users updated:", users);
+                              res.redirect('/editProfil');
+                              req.session.user=users ;
 
-                         res.redirect('/editProfil');
-                         
-                        req.session.user = users;
                               }
 });
+ 
         
     
 },
@@ -186,21 +173,14 @@ findByName : function(res, req){
     }); 
   }*/
 },
-show: function(req, res) {
-    User.findOne(req.param('id'), function foundUser(err, user) {
-      if (err || !user) return res.serverError(err);  // !user should be 404
-      //res.json(user);
-      res.view({user: user});
-    });
-  },
 
-  showAll: function(req, res) {
-    User.find({OnLine: true }, function foundUser(err, users) {
+  showAll: function( res) {
+    User.find(function foundUser(err, users) {
       if (err) return res.serverError(err);
-      else {
-        res.view({users: users});
+      if (!users) res.serverError(err); //('User doesn\'t exist.');
+       User.publishCreate({id: users.id});
       
-      }
+     
     });
   }, 
 
@@ -219,7 +199,25 @@ show: function(req, res) {
       res.redirect('/user');
 
     });
+  },
+   subscribe: function(req, res) {
+ 
+    // Find all current users in the user model
+    User.find(function foundUsers(err, users) {
+      if (err) return next(err);
+ 
+      // subscribe this socket to the User model classroom
+      User.subscribe(req.socket);
+      console.log("User subscribe ", req.socket);
+      // subscribe this socket to the user instance rooms
+      User.subscribe(req.socket, users);
+ 
+      // This will avoid a warning from the socket for trying to render
+      // html over the socket.
+      res.send(200);
+    });
   }
+
 
 
 

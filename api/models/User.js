@@ -6,7 +6,7 @@
 */
 var bcrypt = require('bcryptjs');
 module.exports = {
-
+schema: true,
   attributes: {
 
      email: {
@@ -18,6 +18,12 @@ module.exports = {
       type: 'string',
       required: true
     },
+    username :{
+      type: 'string',
+      required : true ,
+      unique: true
+    },
+
     FirstName: {
     type :'string'
 
@@ -49,10 +55,30 @@ module.exports = {
       type: 'string',
       defaultsTo: ''
     },
+     toJSON: function() {
+      var obj = this.toObject();
+      delete obj.password;
+      delete obj.confirmation;
+      delete obj.encryptedPassword;
+      delete obj._csrf;
+      return obj;
+    }
+
 
   },
 
   beforeCreate: function (values, next) {
+
+    var salt = bcrypt.genSaltSync(10);
+
+    bcrypt.hash(values.password, salt, function (err, hash) {
+      if (err) return next(err);
+      values.password = hash;
+      next();
+    });
+
+  },
+   beforeUpdate: function (values, next) {
 
     var salt = bcrypt.genSaltSync(10);
 
@@ -72,64 +98,28 @@ module.exports = {
       email: inputs.email,
       password: inputs.password,
       FirstName: inputs.FirstName,
-      LastName: inputs.LastName
+      LastName: inputs.LastName,
+      username: inputs.username
       
      }).exec(cb);
   },
-
-
-
-  attemptLogin: function (inputs, cb) {
- // find user
-    User.findOne({
-      email: inputs.email,
-      password: inputs.password
-    })
-    .exec(cb);
-  },
-
- 
-
-  changeEtatToTrue : function (userId){
-
-User.update({id: userId},{onLine : true}, function(err, users) {
-// Error handling
-if (err) {
-return console.log(err);
-// Updated users successfully!
- } else {
-console.log("Users updated:", users);
-}
-});
-
-},
-
-changeEtatToFalse : function (userId){
-
-User.update({id: userId},{onLine : false }, function(err, users) {
-// Error handling
-if (err) {
-return console.log(err);
-// Updated users successfully!
- } else {
-console.log("Users updated:", users);
-}
-});
-
-}
-
-
-/* update: function (inputs, cb) {
- 
-    User.update({
-      
+  edit: function (inputs, cb) {
+    // update a user
+    User.update({id : inputs.idUser },{
+     
       email: inputs.email,
       password: inputs.password,
       FirstName: inputs.FirstName,
-      LastName: inputs.LastName
-    
-       }).exec(cb);
-  },*/
+      LastName: inputs.LastName,
+      username: inputs.username,
+      job: inputs.job,
+      phone: inputs.phone,
+      soc: inputs.soc
+      
+     }).exec(cb);
+  }
+
+
 
 };
 

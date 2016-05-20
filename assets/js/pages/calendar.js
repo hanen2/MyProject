@@ -35,6 +35,16 @@ $(document).ready(function() {
         drag();
         removeEvent();
     });
+      $(".add-event-date").keypress(function (e) {
+        if ((e.which == 13)&&(!$(this).val().length == 0)) {
+            $('<div class="calendar-event"><p>' + $(this).val() + '</p><a href="javascript:void(0);" class="remove-calendar-event"><i class="fa fa-remove"></i></a></div>').insertBefore(".add-event-date");
+            $(this).val('');
+        } else if(e.which == 13) {
+            alert('Please enter event name');
+        }
+        drag();
+        removeEvent();
+    });
     
     
     drag();

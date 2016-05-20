@@ -1,5 +1,5 @@
 <% if (req.session.user) {%>
-    <br><br><br><br><br>
+ <div id="main-wrapper">
 
     <link rel="stylesheet" href="/css/font-icons/entypo/css/entypo.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
@@ -124,9 +124,8 @@
                                     <div id="rootwizard">
                                         <ul class="nav nav-tabs" role="tablist">
                                             <li role="presentation" class="active"><a href="#tab1" data-toggle="tab"><i class="fa fa-user m-r-xs"></i>Personal Info</a></li>
-                                            <li role="presentation"><a href="#tab2" data-toggle="tab"><i class="fa fa-truck m-r-xs"></i>Product Info</a></li>
+                                            <li role="presentation"><a href="#tab2" data-toggle="tab"><i class="fa fa-truck m-r-xs"></i>Others Info</a></li>
                                    
-                                            <li role="presentation"><a href="#tab4" data-toggle="tab"><i class="fa fa-check m-r-xs"></i>Finish</a></li>
                                         </ul>
                           
                                     
@@ -138,7 +137,13 @@
                                             <div class="tab-content">
                                                 <div class="tab-pane active fade in" id="tab1">
                                                     <div class="row m-b-lg">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-3">
+                                                          
+                                                            <div class="m-t-md">
+                                                              <img src="images/user.png">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-9">
                                                             <div class="row">
                                                                 <div class="form-group col-md-6">
                                                                     <label for="exampleInputName">First Name</label>
@@ -147,6 +152,10 @@
                                                                 <div class="form-group  col-md-6">
                                                                     <label for="exampleInputName2">Last Name</label>
                                                                     <input type="text" class="form-control col-md-6" name="LastName" id="exampleInputName2" value='<%=session.user.LastName%>' >
+                                                                </div>
+                                                                   <div class="form-group  col-md-6">
+                                                                    <label for="username">Username</label>
+                                                                    <input type="text" class="form-control col-md-6" name="username" id="username" value='<%=session.user.username%>' >
                                                                 </div>
                                                                 <div class="form-group col-md-12">
                                                                     <label for="exampleInputEmail">Email address</label>
@@ -159,11 +168,7 @@
                                                                
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <h3>Personal Info</h3>
-                                                            <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus.</p>
-                                                            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla.</p>
-                                                        </div>
+                                                       
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane fade" id="tab2">
@@ -207,12 +212,6 @@
                                                 </ul>
                                                 </div>
                                         
-                                                <div class="tab-pane fade" id="tab4">
-                                                    <h2 class="no-s">Thank You !</h2>
-                                                    <div class="alert alert-info m-t-sm m-b-lg" role="alert">
-                                                        Congratulations ! You got the last step.
-                                                    </div>
-                                                </div>
                                             
                                             </div>
                                         </form>
@@ -235,4 +234,10 @@
         
 </div>
 
+       <div class="row">
+                    </div><!-- Row -->
+                </div><!-- Main Wrapper -->
+                <div class="page-footer">
+                    <p class="no-s">2016 &copy; Hanen Hamroun </p>
+                </div>
 <% } %>

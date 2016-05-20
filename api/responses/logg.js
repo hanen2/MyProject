@@ -24,10 +24,14 @@ module.exports = function login(inputs) {
     }
   
    User.publishUpdate(user.id, { id: user.id, FirstName: user.FirstName, OnLine: true });
-   
-  req.session.user = user ;
-  User.changeEtatToTrue(req.session.user.id);
     
+  req.session.user = user ;
+
+  User.changeEtatToTrue(req.session.user.id);
+    Sessions.create({userLog :  req.session.user }).exec(function(error,users){
+                    console.log( users);
+                    
+                }); 
     if (req.wantsJSON || !inputs.successRedirect) {
       return res.ok();
     }

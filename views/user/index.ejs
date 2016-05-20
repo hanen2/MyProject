@@ -1,30 +1,43 @@
+  
+   <script src="/js/sock.js"></script>
 
+<div class="container">
+	<h3>User Administration</h3>
+	<table class='table'>
+		<tr>
+			<th></th>
+			<th>ID</th>
+			<th>FirstName</th>
+			<th>LastName</th>
+			<th>Email</th>
+			<th></th>
+			<th></th>
+			<th></th>
+		</tr>
+		
 
- 
+		<% _.each(users, function(user) { %>
+		<tr data-id="<%= user.id %>" data-model="user">
+			<% if (user.onLine) { %>
+				<td><img src="/images/icon-online.png"></td>
+			<% } else { %>
+				<td> <img src="/images/icon-offline.png"></td>
+			<% } %>
+			<td><%= user.id %></td>
+			<td><%= user.FirstName %></td>
+			<td><%= user.LastName %></td>
+			<td><%= user.email %></td>
+		
+			<td><a href="/user/show/<%= user.id %>" class="btn btn-sm btn-primary">Show</a></td>
+		
 
-       <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s1">
-            <h3><span class="pull-left">Chat</span><a href="javascript:void(0);" class="pull-right" id="closeRight"><i class="fa fa-times"></i></a></h3>
+			<td><form action="/user/destroy/<%= user.id %>" method="POST">
+				<input type="hidden" name="_method" value="delete"/>
+				<input type="submit" class="btn btn-sm btn-danger" value="Delete"/>
+				<input type="hidden" name="_csrf" value="<%= _csrf %>" />
+			</form></td>
+		</tr> 
 
-
-
-hhhhhhhhhhhhhhhhhhhhhhhhhhh
- 
-
-
-
-    <% _.each(users,function(user) { %>
-      <a href="javascript:void(0);" class="showRight2"><img src="/images/avatar2.png" alt=""><span><%=user.FirstName %> <%= user.LastName %>  <small><% if (user.onLine) {%> connecté <%} else { %> non connecté <%}%></small></span></a> 
-      <% }) ;%>
-
-    
-
-
-
-        </nav>
-
-
-
-
-
-
-
+		<% }) %>
+	</table>
+</div>

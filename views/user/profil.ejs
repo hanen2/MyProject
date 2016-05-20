@@ -38,7 +38,7 @@
                             <a href="#"> <%=session.user.FirstName%> <%=session.user.LastName%></a>
                             <a href="#" class="user-status is-online tooltip-primary" data-toggle="tooltip" data-placement="top" data-original-title="Online"></a>
                             <!-- User statuses available classes "is-online", "is-offline", "is-idle", "is-busy" -->                        </strong>
-                        <span><a href="#">Co-Founder at Laborator</a></span>
+                        <span><a href="#"><%=session.user.job%> in <%=session.user.soc%></a></span>
                     </div>
                 </li>
                 
@@ -462,7 +462,7 @@
                     </div><!-- Row -->
                 </div><!-- Main Wrapper -->
                 <div class="page-footer">
-                    <p class="no-s">2015 &copy; Modern by Steelcoders.</p>
+                    <p class="no-s">2016 &copy; Hanen Hamroun</p>
                 </div>
 
 <% } %>

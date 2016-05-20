@@ -22,15 +22,8 @@
 
   module.exports.policies = {
 
-   '*':  true,
+   '*':  true
 
-  PostController: {
-    '*': 'isAuthenticated'
-  },
-
-   
-MessageController: {
-    'create': 'messagePolicy'
-  }
+	
 };
 
