@@ -6,6 +6,20 @@
  */
 var bcrypt = require('bcryptjs');
 module.exports = {
+
+
+
+    index: function(req, res, next) {
+
+    // Get an array of all users in the User collection(e.g. table)
+    Sessions.find(function foundUsers(err, users) {
+      if (err) return next(err);
+      // pass the array down to the /views/index.ejs page
+      res.view({
+        users: users
+      });
+    });
+  },
 	
 login: function(req, res) {
 
@@ -37,9 +51,9 @@ login: function(req, res) {
 
                 // The user has authenticated successfully, set their session
                 req.session.authenticated = true;
-                req.session.user = user ;
+                req.session.User = user ;
                 req.session.err=null;
-           Sessions.changeEtatToTrue(req.session.user.id);
+                Sessions.changeEtatToTrue(user.id);
 
                  User.publishUpdate(user.id, {
                          loggedIn: true,
@@ -48,10 +62,10 @@ login: function(req, res) {
                         action: ' has logged in.'
                                   });
                     
-    Sessions.create({id : req.session.user.id  , userLog :  req.session.user }).exec(function(error,users){
+    Sessions.create({id : req.session.User.id  , userLog :  req.session.User }).exec(function(error,users){
                     console.log( users  );
                   
-                  Sessions.publishCreate( { id: users.id  , userLog: users });
+                  Sessions.publishCreate( { id: users.id  , username: users.username });
                 });
 
                 // Redirect to protected area
@@ -67,7 +81,10 @@ login: function(req, res) {
 
 
     req.session.err=null;
-    Sessions.findOne( req.session.user.id , function foundUser (err, user) {
+      Sessions.changeEtatToFalse(req.session.User.id);
+
+              
+    Sessions.findOne( req.session.User.id , function foundUser (err, user) {
       if (err) return res.serverError(err);
 
       if (!user) res.serverError(err); //('User doesn\'t exist.');
@@ -75,14 +92,38 @@ login: function(req, res) {
       Sessions.destroy(user.id, function userDestroyed(err) {
         if (err) return res.serverError(err);
       });
+   User.publishUpdate(user.id, {
+                         loggedIn: false,
+                        id: user.id,
+                        username: user.username,
+                        action: ' has logged in.'
+                                  });
 
     });
 
- Sessions.changeEtatToFalse(req.session.user.id);
- req.session.user = null;
+ 
+ req.session.User = null;
 
     return res.redirect('/');
+  },
+     subscribe: function(req, res) {
+ 
+    // Find all current users in the user model
+    Sessions.find(function foundUsers(err, users) {
+      if (err) return next(err);
+ 
+      // subscribe this socket to the User model classroom
+      Sessions.subscribe(req.socket);
+      console.log("User subscribe ", req.socket);
+      // subscribe this socket to the user instance rooms
+      Sessions.subscribe(req.socket, users);
+ 
+      // This will avoid a warning from the socket for trying to render
+      // html over the socket.
+      res.send(200);
+    });
   }
+
 
 
 };

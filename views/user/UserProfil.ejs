@@ -1,4 +1,6 @@
 <% if (req.session.User) {%>
+<% if (req.session.User.id == req.session.UserProfil.id) { %>
+
 
  <div id="main-wrapper">
 
@@ -154,4 +156,140 @@
                     <p class="no-s">2016 &copy; Hanen Hamroun</p>
                 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%} else { %>
+ <div id="main-wrapper">
+
+
+    <link rel="stylesheet" href="/css/font-icons/entypo/css/entypo.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
+    <link rel="stylesheet" href="/css/neon.css">
+
+   <script src="/js/dependencies/jquery.js"></script>
+    <script src="/js/jquery-1.11.0.min.js"></script>
+
+
+<div class="page-body" >
+
+<div class="profile-env">
+    
+    <header class="row">
+        
+        <div class="col-sm-2">
+            
+            <a href="#" class="profile-picture">
+                <img src="/images/avatar4.png" class="img-responsive img-circle" />
+            </a>
+            
+            
+        </div>
+        
+        <div class="col-sm-7">
+            
+            <ul class="profile-info-sections">
+                <li>
+                    <div class="profile-name">
+                        <strong>
+                            <a href="#"> <%=session.UserProfil.FirstName%> <%=session.UserProfil.LastName%></a>
+                            <%if(session.UserProfil.onLine) {%> 
+                            <a href="#" class="user-status is-online tooltip-primary" data-toggle="tooltip" data-placement="top" data-original-title="Online"></a>
+                            <%} else { %>
+                                <a href="#" class="user-status is-offline tooltip-primary" data-toggle="tooltip" data-placement="top" data-original-title="Offline"></a>
+                                <%}%>
+                            <!-- User statuses available classes "is-online", "is-offline", "is-idle", "is-busy" -->                        </strong>
+                        <span><a href="#"><%=session.UserProfil.job%> in <%=session.UserProfil.soc%></a></span>
+                    </div>
+                </li>
+               
+            </ul>
+            
+        </div>
+        
+        <div class="col-sm-3">
+            
+            <div class="profile-buttons">
+              
+                
+                <a href="#" class="btn btn-default">
+                    <i class="entypo-mail"></i>
+                </a>
+            </div>
+        </div>
+        
+    </header>
+    
+    <section class="profile-info-tabs">
+        
+        <div class="row">
+            
+            <div class="col-sm-offset-2 col-sm-10">
+                
+                <ul class="user-details">
+                    <li>
+                       
+                            <i class="entypo-location"></i>
+                            Tunisie, Sfax
+                        
+                    </li>
+                    
+                    <li>
+                        <a href="#">
+                            <i class="entypo-suitcase"></i>
+                            Works as <span>Laborator</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="#">
+                            <i class="entypo-calendar"></i>
+                            16 October
+                        </a>
+                    </li>
+                </ul>
+                
+                
+                <!-- tabs for the profile links -->
+           
+               <%=req.session.UserProfil.desc%> 
+            </div>
+            
+        </div>
+        
+    </section>
+    
+    
+ 
+</div>
+
+    <!-- Bottom Scripts -->
+    <script src="/js/gsap/main-gsap.js"></script>
+
+    <script src="/js/joinable.js"></script>
+    <script src="/js/resizeable.js"></script>
+  
+
+</div>
+                    <div class="row">
+                    </div><!-- Row -->
+                </div><!-- Main Wrapper -->
+                <div class="page-footer">
+                    <p class="no-s">2016 &copy; Hanen Hamroun</p>
+                </div>
+
+<% } %>
 <% } %>

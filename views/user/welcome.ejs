@@ -1,36 +1,80 @@
-<% if (req.session.user) {%>
-       
+<% if (req.session.User) {%>
 
 
-  <body ng-app="socketApp" ng-controller="ChatController">
-
-  
-
-    <div class="col-lg-12">
-      
-      <form class="form_chat">
-            
-        <div class="col-lg-6 col-md-5">
-          <!-- Chat Message -->
-            <input type="text" ng-model = "chatMessage" class="form-control" placeholder="TypeYourMessageHere">
-            </div>
-            <button class="btn btn-default col-lg-2 col-md-2" ng-click="sendMsg()">Send</button>  
-      </form>
-      
-    </div>
-
-  <div class="col-md-12" style="padding:100px">
-  <table  class="table">
-    <tr class="chat_message" ng-repeat="chat in chatList | orderBy:predicate:reverse | limitTo: 15">
-      <td class="col-md-12 td_class">{{ chat.user }}: {{ chat.message }}</td>
-    </tr>
-  </table>
+<body  > 
 
 
-   </div>
+<div id="main-wrapper">
+                    <div class="row" >
+                       <div ng-repeat="event in EventList ">
+
+                           <div class="col-lg-3 col-md-6">
+                            <div class="panel info-box panel-white">
+                                <div class="panel-body ">
+                                    <div class="info-box-stats">
+                                        <p class="counter">{{event.titleEvent}} 
+                                     By {{event.creator}}</p>
+                                       
+                                        <span class="info-box-title">
+                                 
+                                            <div id ="time"> <b> in 3 days</b></div> </span>
+                                    </div>
+                                       <div class="info-box-icon">
+                                     <i>    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></i>
+                                    </div>
+                                     <div class="panel-body ">
+                                    <div class="info-box-stats">
+                                       <span class="info-box-title">  
+                                         {{ event.Description }} 
+                                       
+                                    </span>
+                                    </div>
+
+                                  
+                                            </div>
+                                 
+
+                                    <div class="info-box-progress">
+                                        <div class="progress progress-xs progress-squared bs-n">
+                                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        </div>
+                   
+                      
+                     
+                    </div><!-- Row -->
+                   
+
+<div class="row" id="chat">
+  <div id="messages" class="col-xs-10"></div>
+  <div id="users" class="col-xs-2">
+    <p class="lead">Users</p>
+    <ul>    </ul>
   </div>
+</div>
 
-  </body>
-                 
+<div class="row" id="message-entry">
+  <div class="col-xs-11">
+    <input id="new-message" class="form-control" type="text" name="new-message" />
+  </div>
+  <div class="col-xs-1">
+    <button id="send-message" class="btn btn-default">Send</button>
+  </div>
+</div>
 
+
+                </div><!-- Main Wrapper -->
+
+
+
+<div class="page-footer">
+                    <p class="no-s">2015 © Modern by Steelcoders.</p>
+                </div>
+</body>
 <% } %>

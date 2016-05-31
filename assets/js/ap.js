@@ -58,7 +58,7 @@ var socketAppUsers =angular.module('socketAppUsers',[]);
 
               $scope.UserListOnLine = success_data;
               $log.info(success_data);
-/*
+
               var j=0;
    for (var i = 0; i < $scope.UserList.length; i++) {
         if ($scope.UserList[i].onLine) {
@@ -66,7 +66,7 @@ var socketAppUsers =angular.module('socketAppUsers',[]);
            j++;
         }
          
-      }*/
+      }
            });
  };
  $scope.getAllOnlineUsers();
@@ -82,14 +82,6 @@ var socketAppUsers =angular.module('socketAppUsers',[]);
       });
 
 
-    $scope.changeDiv = function(){ 
-
-      var divusers= $('#cbp-spmenu-s1'),
-     divchat= $('#cbp-spmenu-s2');
-         divusers.hide();
-         divchat.show();
-}
-
 
     }]);
   
@@ -97,58 +89,46 @@ var socketAppUsers =angular.module('socketAppUsers',[]);
 
 
 
+var AppUser = angular.module('AppUser',[]);
 
-var AppEvent = angular.module('AppEvent',[]);
-
-    AppEvent.controller('EventController',['$http','$log','$scope',function($http,$log,$scope){
-
-
-      $scope.predicate = '-id';
-      $scope.reverse = false;
-      $scope.baseUrl ='$location.protocol()' + "://" + '$location.host';
-      $scope.EventList =[];
+    AppUser.controller('UserController',['$http','$log','$scope',function($http,$log,$scope){
+    
       $scope.items =[];
 
-    
-
-        io.socket.get('/event/newEvent');
-
-        $http.get($scope.baseUrl+'/event')
-           .success(function(success_data){
-
-              $scope.EventList = success_data;
-              $log.info(success_data);
-           });
-     
-
-    $http.get('/event/find').success(function(data) {
-          for (var i =0 ; i < 3 ; i++) {
+    $http.get('/user/find').success(function(data) {
+          for (var i =0 ; i < data.length ; i++) {
             data[i].index = i;
           }
           $scope.items = data;
         });
-  
-      $scope.eventTitle="";
+
+     
+
+      $scope.EventList =[];
       
 
-      io.socket.on('event',function(obj){
 
-        if(obj.verb === 'created'){
-          $log.info(obj)
-          $scope.EventList.push(obj.data); //add the new to the DOM
-          $scope.$digest();
-        }
- 
-      });
+    $http.get('/event/find').success(function(data) {
+          for (var i =0 ; i < data.length ; i++) {
+            data[i].index = i;
+          }
+          $scope.EventList = data;
+        });
 
-      $scope.AddEvent = function(){
-        $log.info($scope.eventTitle);
-        io.socket.post('/event/newEvent',{titleEvent: $scope.eventTitle , date : $scope.eventDate});
-        $scope.eventTitle = "";
-        $scope.eventDate="";
-      };
+     $scope.OnlineUserList =[];
+      
+
+
+    $http.get('/sessions/find').success(function(data) {
+          for (var i =0 ; i < data.length ; i++) {
+            data[i].index = i;
+          }
+          $scope.OnlineUserList = data;
+        });
+   
 
     }]);
+
 
 
 

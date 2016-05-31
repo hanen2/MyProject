@@ -75,45 +75,7 @@ $(document).ready(function() {
 					start: new Date(year, month, day-5),
 					end: new Date(year, month, day-2)
 				},
-				{
-					id: 999,
-					title: 'Repeating Event',
-					start: new Date(year, month, day)
-				},
-				{
-					id: 999,
-					title: 'Repeating Event',
-					start: new Date(year, month, day+7)
-				},
-				{
-					title: 'Conference',
-					start: new Date(year, month, day+3),
-					end: new Date(year, month, day+6)
-				},
-				{
-					title: 'Meeting',
-					start: new Date(year, month, day+5)
-				},
-				{
-					title: 'Lunch',
-					start: new Date(year, month, day+7)
-				},
-				{
-					title: 'Meeting',
-					start: new Date(year, month, day+10)
-				},
-				{
-					title: 'Happy Hour',
-					start: new Date(year, month, day+10)
-				},
-				{
-					title: 'Dinner',
-					start: new Date(year, month, day+13)
-				},
-				{
-					title: 'Birthday Party',
-					start: new Date(year, month, day+15)
-				},
+			
 				{
 					title: 'Click for Google',
 					url: 'http://google.com/',

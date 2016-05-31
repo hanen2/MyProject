@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 
- <% if (req.session.user) { %>
+ <% if (req.session.User) { %>
 
-<body>
+<body ng-app="AppUser"  ng-controller="UserController">
    
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
         <meta charset="UTF-8">
@@ -34,19 +34,13 @@
         <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s1"   >
             <h3><span class="pull-left">Uers OnLine</span><a href="javascript:void(0);" class="pull-right" id="closeRight"><i class="fa fa-times"></i></a></h3>
  
+               
+              <div class="slimscroll"  ng-repeat =" user in OnlineUserList">
+                <a href="javascript:void(0);" class="showRight2"><img src="assets/images/avatar2.png" alt=""><span>{{user.userLog.FirstName}}<small>Hi! How're you?</small></span></a>
              
-            <div class="slimscroll"  id="users" >
-          <div  > 
-           <a href="javascript:void(0);" class="showRight2"><img src="/images/avatar2.png" alt="">
-                    <span>
-             {{ user.userLog.FirstName }}
-                  <small> 
-                      </small>
-                  </span>
-              </a> </div>
-               
-               
             </div>
+
+      
         </nav>
         <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">
             <form class="form-horizontal" action="/sendMsg" method="POST">
@@ -102,8 +96,8 @@
         </nav>
         <div class="menu-wrap">
             <nav class="profile-menu">
-                <div class="profile"><img src="/images/avatar1.png" width="52" alt="David Green"/><span>
-                    <%=session.user.FirstName%> <%=session.user.lastName%></span></div>
+                <div class="profile"><img src='<%=session.User.avatarFd%>' width="52" alt="David Green"/><span>
+                    <%=session.User.FirstName%> <%=session.User.lastName%></span></div>
                 <div class="profile-menu-list">
                     <a href="#"><i class="fa fa-star"></i><span>Favorites</span></a>
                     <a href="#"><i class="fa fa-bell"></i><span>Alerts</span></a>
@@ -113,9 +107,15 @@
             </nav>
             <button class="close-button" id="close-button">Close Menu</button>
         </div>
-        <form class="search-form" action="#" method="GET">
-            <div class="input-group">
-                <input type="text" name="search" class="form-control search-input" placeholder="Search...">
+        <form class="search-form">
+            <div class="input-group"  >
+                <input list="users" type="text" id="choix_users" name="search" class="form-control search-input" placeholder="Search...">
+
+                    <datalist id="users" >
+ 
+    <div ng-repeat="user in items">  <option id='{{user.id}}' value=' {{user.FirstName}} {{user.LastName}}'  > {{user.id}} </option></div>
+                     </datalist>
+
                 <span class="input-group-btn">
                     <button class="btn btn-default close-search waves-effect waves-button waves-classic" type="button"><i class="fa fa-times"></i></button>
                 </span>
@@ -280,8 +280,8 @@ function date_heure(id)
                                 </li>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic" data-toggle="dropdown">
-                                        <span class="user-name"><%=session.user.FirstName%><i class="fa fa-angle-down"></i></span>
-                                        <img class="img-circle avatar" src="/images/avatar1.png" width="40" height="40" alt="">
+                                        <span class="user-name"><%=session.User.FirstName%><i class="fa fa-angle-down"></i></span>
+                                 <img class="img-circle avatar" src='<%=session.User.avatarFd%>' width="40" height="40" alt="">
                                     </a>
                                     <ul class="dropdown-menu dropdown-list" role="menu">
                                         <li role="presentation"><a href="/profil"><i class="fa fa-user"></i>Profile</a></li>
@@ -313,10 +313,10 @@ function date_heure(id)
                         <div class="sidebar-profile">
                             <a href="javascript:void(0);" id="profile-menu-link">
                                 <div class="sidebar-profile-image">
-                                    <img src="/images/avatar1.png" class="img-circle img-responsive" alt="">
+                                    <img src='<%=session.User.avatarFd%>' class="img-circle img-responsive" alt="">
                                 </div>
                                 <div class="sidebar-profile-details">
-                                    <span><%=session.user.FirstName%> <%=session.user.LastName%><br><small>Art Director</small></span>
+                                    <span><%=session.User.FirstName%> <%=session.User.LastName%><br><small><%=session.User.job%></small></span>
                                 </div>
                             </a>
                         </div>
@@ -453,19 +453,24 @@ function date_heure(id)
         <script src="/plugins/fullcalendar/fullcalendar.min.js"></script>
         <script src="/js/modern.min.js"></script>
         <script src="/js/pages/calendar.js"></script>
-        
         <script src="/js/pages/form-wizard.js"></script>
-         <script src="/js/socket.io.js"></script>
-        <script src="/js/dependencies/sails.io.js"></script>
-       
+
         <script src="/js/dependencies/angular.js"></script>
         <script src="/js/dependencies/angular-route.js"></script>
         <script src="/js/dependencies/angular-loader.js"></script>
         <script src="/js/dependencies/angular-mocks.js"></script>    
         <script src="/js/ap.js"></script>
-        
-
-          
+        <script src="/js/user.js"></script>
+        <script src="/js/event.js"></script>
+        <!-- Bring in the socket.io client -->
+    <script type="text/javascript" src="/js/socket.io.js"></script>
+    <!-- then beef it up with some convenience logic for talking to Sails.js -->
+     <script type="text/javascript" src="/js/dependencies/sails.io.js"></script>
+  
+    <script src="/linker/js/app.js"></script>
+    <script src="/linker/js/bootstrap.js"></script>
+    <script src="/linker/js/customValidate.js"></script>
+    <script src="/linker/js/underscore.js"></script>
 
    
     </div>

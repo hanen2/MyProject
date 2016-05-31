@@ -1,22 +1,30 @@
+/**
+ * app.js
+ *
+ * This file contains some conventional defaults for working with Socket.io + Sails.
+ * It is designed to get you up and running fast, but is by no means anything special.
+ *
+ * Feel free to change none, some, or ALL of this file to fit your needs!
+ */
+
 
 (function (io) {
 
   // as soon as this file is loaded, connect automatically, 
-  var socket = sails.io.connect();
+  var socket = io.connect();
   if (typeof console !== 'undefined') {
     log('Connecting to Sails.js...');
-    log('gggggggggggg');
   }
 
   socket.on('connect', function socketConnected() {
 
-    console.log("This is from the connect: ", this.socket.sessionid);
+    console.log("This is from the connect: ");
 
     // Listen for the socket 'message'
     socket.on('message', cometMessageReceivedFromServer);
 
     // Subscribe to the user model classroom and instance room
-    socket.get('/user/subscribe');
+    io.socket.get('/user/subscribe');
 
     ///////////////////////////////////////////////////////////
     // Here's where you'll want to add any custom logic for
@@ -94,12 +102,12 @@ function updateUserInDom(userId, message) {
     case '/user':
 
       // This is a message coming from publishUpdate
-      if (message.verb === 'updated') {
+      if (message.verb === 'update') {
         UserIndexPage.updateUser(userId, message);
       }
 
       // This is a message coming from publishCreate
-      if(message.verb === 'created') {
+      if(message.verb === 'create') {
         UserIndexPage.addUser(message);
       }
       // This is a message coming publishDestroy
@@ -140,8 +148,8 @@ var UserIndexPage = {
   // Add the template to the bottom of the User Administration Page
     $( 'tr:last' ).after(
       
-      // This is the path to the templates file 
-      JST['assets/templates/addUser.ejs']( obj )
+      // This is the path to the templates file
+      JST['assets/linker/templates/addUser.ejs']( obj )
     );
   },
 
@@ -149,4 +157,4 @@ var UserIndexPage = {
   destroyUser: function(id) {
     $('tr[data-id="' + id + '"]').remove();
   }
-};
+}

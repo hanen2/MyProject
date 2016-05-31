@@ -3,12 +3,10 @@ $(document).ready(function() {
         rules: {
         
 		    exampleInputEmail: {
-                required: true,
+               
                 email: true
 		    },
-		    exampleInputPassword1: {
-                required: true
-		    },
+		   
 		
 		    phone: {
             

@@ -34,13 +34,13 @@ schema: true,
     },
     onLine : {
       type: 'boolean' ,
-      defaultsTo : false ,
-      required: true
+      defaultsTo : false 
+    
     },
    
      avatarFd : {
       type :'string',
-      defaultsTo : 'c://sails//voip//.tmp//uploads//user.png'
+      defaultsTo : '/images/user.png'
     },
 
     job :{
@@ -55,30 +55,13 @@ schema: true,
       type: 'string',
       defaultsTo: ''
     },
-     toJSON: function() {
-      var obj = this.toObject();
-      delete obj.password;
-      delete obj.confirmation;
-      delete obj.encryptedPassword;
-      delete obj._csrf;
-      return obj;
+    desc :{
+      type : 'text'
     }
-
 
   },
 
   beforeCreate: function (values, next) {
-
-    var salt = bcrypt.genSaltSync(10);
-
-    bcrypt.hash(values.password, salt, function (err, hash) {
-      if (err) return next(err);
-      values.password = hash;
-      next();
-    });
-
-  },
-   beforeUpdate: function (values, next) {
 
     var salt = bcrypt.genSaltSync(10);
 
@@ -102,23 +85,7 @@ schema: true,
       username: inputs.username
       
      }).exec(cb);
-  },
-  edit: function (inputs, cb) {
-    // update a user
-    User.update({id : inputs.idUser },{
-     
-      email: inputs.email,
-      password: inputs.password,
-      FirstName: inputs.FirstName,
-      LastName: inputs.LastName,
-      username: inputs.username,
-      job: inputs.job,
-      phone: inputs.phone,
-      soc: inputs.soc
-      
-     }).exec(cb);
   }
-
 
 
 };

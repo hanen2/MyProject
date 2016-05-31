@@ -84,9 +84,9 @@ module.exports = {
 
 
     // Save the "fd" and the url where the avatar for a user can be accessed
-    User.update({id :req.session.user.id }, {
+    User.update({id :req.session.User.id }, {
 
-      
+   //    avatarUrl: require('util').format('%s/user/avatar/%s', sails.getBaseUrl(), req.session.me),
 
       // Grab the first file and use it's `fd` (file descriptor)
       avatarFd: uploadedFiles[0].fd
@@ -105,7 +105,7 @@ load: function (req, res){
     id: 'string'
   });
 
-  User.findOne(req.session.user.id ).exec(function (err, user){
+  User.findOne(req.session.User.id ).exec(function (err, user){
     if (err) return res.negotiate(err);
     if (!user) return res.notFound();
 
@@ -127,51 +127,71 @@ load: function (req, res){
   });
 },
 
+addDesc : function(req,res ){
+
+
+User.update({id: req.session.User.id },{desc : req.param('desc')}, function(err, users) {
+// Error handling
+if (err) {
+return console.log(err);
+// Updated users successfully!
+ } else {console.log('Updated user to have desc ' + users[0].desc);
+ req.session.User.desc = users[0].desc; 
+  res.redirect('/profil');
+}
+});
+
+
+},
 
 update: function (req, res) {
 
- User.edit({
-      idUser : req.session.user.id,
-      email: req.param('exampleInputEmail'),
-      password: req.param('exampleInputPassword1'),
+User.update({id: req.session.User.id }, 
+      {email: req.param('exampleInputEmail'),
       FirstName: req.param('FirstName'),
       LastName: req.param('LastName'),
       username: req.param('username'),
       job: req.param('job'),
       phone: req.param('phone'),
-      soc: req.param('soc')
-      
+      soc: req.param('soc')}, function(err, users) {
+// Error handling
+if (err) {
+return console.log(err);
+// Updated users successfully!
+ } else {
 
-    }, function(err, users) {
-        // Error handling
-             if (err) {
-                 return console.log(err);
-              
-                      } else {
-                  
-                           console.log("Users updated:", users);
-                              res.redirect('/editProfil');
-                              req.session.user=users ;
-
-                              }
+   req.session.User= users[0];
+  console.log('Updated user  ' + users[0]);
+  res.redirect('/editProfil');
+}
 });
- 
-        
-    
+
+
+
 },
+ 
 
 
+findUser : function(req,res){ 
 
-findByName : function(res, req){
-  /*var name = req . param ( 'name' ); 
-    User . findByName ( name ). done ( function  ( err , users )  { 
-      if  ( err )  { 
-        res . send ( 400 ); 
-      }  else  { 
-        res . send ( users ); 
-      } 
-    }); 
-  }*/
+
+User.findOne({
+  id :req.query.id
+}).exec(function (err, foundUser){
+  if (err) {
+    console.log('errr');
+  }
+  if (!foundUser) {
+    console.log('Could not find foundUser, sorry.');
+  }
+
+req.session.UserProfil=foundUser;
+ res.redirect('/UserProfil');
+
+
+  
+
+});
 },
 
   showAll: function( res) {
@@ -196,11 +216,11 @@ findByName : function(res, req){
         if (err) return res.serverError(err);
       });
 
-      res.redirect('/user');
+      res.redirect('/user/index');
 
     });
   },
-   subscribe: function(req, res) {
+    subscribe: function(req, res) {
  
     // Find all current users in the user model
     User.find(function foundUsers(err, users) {
@@ -208,7 +228,7 @@ findByName : function(res, req){
  
       // subscribe this socket to the User model classroom
       User.subscribe(req.socket);
-      console.log("User subscribe ", req.socket);
+ 
       // subscribe this socket to the user instance rooms
       User.subscribe(req.socket, users);
  

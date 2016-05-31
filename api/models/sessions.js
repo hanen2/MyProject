@@ -13,16 +13,15 @@ module.exports = {
  },
 
   },
+    changeEtatToTrue : function (userId){
 
-  changeEtatToTrue : function (userId){
-
-User.update({id: userId},{onLine : true}, function(err, users) {
+User.update({id: userId},{onLine : true }, function(err, users) {
 // Error handling
 if (err) {
 return console.log(err);
 // Updated users successfully!
  } else {
-console.log("Users updated:");
+console.log("onLine true ");
 }
 });
 
@@ -36,10 +35,9 @@ if (err) {
 return console.log(err);
 // Updated users successfully!
  } else {
-console.log("Users updated:");
+console.log("onLine false ");
 }
 });
 
 }
-
 };

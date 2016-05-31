@@ -7,26 +7,35 @@
 
 module.exports = {
 
+    index: function(req, res, next) {
 
+   
+    Event.find(function foundEvents(err, events) {
+      if (err) return next(err);
+      // pass the array down to the /views/index.ejs page
+      res.view({
+        events: events
+      });
+    });
+  },
 
 newEvent : function  (req,res) {
-   var data_from_client = req.params.all();
-
-        if(req.isSocket && req.method === 'POST'){
-
-    Event.create({ creator : req.session.user.FirstName ,
-    	titleEvent: data_from_client.titleEvent ,
-    	 date : data_from_client.date})
+  var title=req.param('title');
+  var description =req.param('description');
+  var date =req.param('date');
+    Event.create({ creator : req.session.User.username ,
+      titleEvent: title , 
+      	Description: description ,
+    	 date :date})
                 .exec(function(error,events){
                     console.log(events);
    Event.publishCreate({id: events.id, titleEvent : events.titleEvent , creator:events.creator, date :events.date});
+  
+               res.redirect('/calendar');
+
                 }); 
-        }
-        else if(req.isSocket){
-            
-            Event.watch(req.socket);
-            console.log( 'creator subscribed to ' + req.socket.id );
-        }
+        
+        
 }
 
 
