@@ -1,65 +1,96 @@
 module.exports.routes = {
 
-  
   '/':  { 
-  	view: 'homepage' 
+  	view: 'user/welcome' 
    },
-
-'/lock-screen': {
-   view: 'user/lock-screen' 
-    },
-
 
   '/welcome': {
    view: 'user/welcome' ,
   
-    },
+    },  
 
-  '/hello': {
-   view: 'say/Hello' ,
+     '/FinishedRoom': {
+   view: 'user/FinishedRoom' ,
+  
+    }, 
+
+     '/notifs': {
+   view: 'user/notifs' ,
+  
+    },  
+      '/addNewUser': {
+   view: 'user/signup' ,
+  
+    },     
+
+     '/AllUsers': {
+   view: 'user/AllUsers' ,
   
     },
 
-
-  '/UserProfil': {
+  '/UserProfil/:id': {
    view: 'user/UserProfil' ,
   
-    },
-    '/users': {
-   view: 'user/users' ,
-  
-    },
-
-      '/chatRoom': {
-   view: 'user/chatRoom' ,
-  
-    },
+    },   
 
     '/profil': {
    view: 'user/profil' 
-    },
+    }, 
 
-    '/inbox': {
-   view: 'user/inbox' 
+     '/timeLine': {
+   view: 'user/timeLine' 
     },
 
 'get /editProfil': {
    view: 'user/editProfil' 
     },
 
-
     '/calendar': {
    view: 'user/calendar' 
+    }, 
+
+    '/search': {
+   view: 'user/search' 
     },
 
-     
+       '/private': {
+   view: 'user/private' 
+    },
 
+'/Rooms/:id': {
+    controller: 'RoomController',
+    action: 'render'
+  },
+  '/notifs/:id': {
+    controller: 'NotifController',
+    action: 'findNotifById'
+  },
+    '/finish/:id': {
+    controller: 'RoomController',
+    action: 'finish'
+  },
+
+
+  '/join/:id': {
+    controller: 'RoomController',
+    action: 'join'
+  },
+
+   '/leave/:id': {
+    controller: 'RoomController',
+    action: 'leave'
+  },
+ 
 'post /newEvent': 'EventController.newEvent',
+'post /newRoom': 'RoomController.newRoom',
+
+'post /EditPassw': 'UserController.EditPassw',
 'post /upload': 'UserController.upload',
 'post /addDesc': 'UserController.addDesc',
+
   'post /login': 'SessionsController.login',
   'POST /signup': 'UserController.signup',
   '/logout': 'SessionsController.logout',
  // 'GET / user / ' :  'UserController.findAll' , 
-  'GET /user?:id?' : 'UserController.findUser'
+ 'GET /profil/:id' : 'UserController.findUser'
 };

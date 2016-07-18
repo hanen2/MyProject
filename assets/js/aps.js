@@ -1,108 +1,90 @@
-
 /**
- * app.js
- *
- * This file contains some conventional defaults for working with Socket.io + Sails.
- * It is designed to get you up and running fast, but is by no means anything special.
- *
- * Feel free to change none, some, or ALL of this file to fit your needs!
- */
+* Chat Room
+*/
 
-
-(function (io) {
-
-  // as soon as this file is loaded, connect automatically,
-  //var socket = io.connect;
-  //console.log(socket) ;
-  if (typeof console !== 'undefined') {
-    log('Connecting to Sails.js...');
-  }
-
-  io.socket.on('connect', function socketConnected() {
-
-    // Listen for Comet messages from Sails
-    io.socket.on('message', function messageReceived(message) {
-
-      ///////////////////////////////////////////////////////////
-      // Replace the following with your own custom logic
-      // to run when a new message arrives from the Sails.js
-      // server.
-      ///////////////////////////////////////////////////////////
-      log('New comet message received :: ', message);
-      //////////////////////////////////////////////////////
-
-    });
-
-
-    ///////////////////////////////////////////////////////////
-    // Here's where you'll want to add any custom logic for
-    // when the browser establishes its socket connection to
-    // the Sails.js server.
-    ///////////////////////////////////////////////////////////
-    log(
-        'Socket is now connected and globally accessible as `socket`.\n' +
-        'e.g. to send a GET request to Sails, try \n' +
-        '`socket.get("/", function (response) ' +
-        '{ console.log(response); })`'
-    );
-    ///////////////////////////////////////////////////////////
-
-
-  });
-
-
-  // Expose connected `socket` instance globally so that it's easy
-  // to experiment with from the browser console while prototyping.
- // window.socket = socket;
-
-
-  // Simple log function to keep the example simple
-  function log () {
-    if (typeof console !== 'undefined') {
-      console.log.apply(console, arguments);
-    }
-  }
-
-
-})(
-
-  // In case you're wrapping socket.io to prevent pollution of the global namespace,
-  // you can replace `window.io` with your own `io` here:
-  window.io
-
-);
-
-
-/**
- * Chat Room
- */
-
+if (document.forms['status_update_form']) {
 (function($) {
-  var messageDiv = $('#messages'),
-   newMessage = $('#new-message'),
-    chatWindow = $('#chat'),
-    userList = $('#users ul'),
-    sendButton = $('#send-message');
 
-  socket.request('/message');
-  socket.request('/sessions');
 
-  
 
-  var getUsers = function () {
-    socket.get('/sessions', function (users) {
-      console.log(users);
-      for (var i = 0; i < users.length; i++) {
-       
-          userList.append(
-            '<li id="user-' + users[i].id + '">' + users[i].username + '</li>'
-          );
-        
-      }
+    /**
+     * Declare Variables
+     */
+    var the_form = document.forms['status_update_form'],
+        messages_container  = $('#messages_container'),
+        chatroom_id = the_form.chatroom_id.value;
+
+
+    /**
+     * Define Functions
+     */
+
+    var submitStatusUpdate = function () {
+
+        post_data = {
+            chatroom_id: the_form.chatroom_id.value,
+            username   : the_form.username.value,
+            content    : the_form.content.value
+        };
+
+        socket.post('/statusupdate', post_data,
+            function (data) {
+                /* Duplication Here */
+                // renderMessage(data);
+            });
+
+        the_form.content.value = "";
+    };
+    var renderMessage = function (msg) {
+        // var time = moment(msg.createdAt).format('YYYY-MM-DD HH:mm');
+        messages_container.prepend(
+            '<li class="list-group-item">' +
+                '<h5>' + msg.username + '</h5>' +
+                '<p>' + msg.content  + '</p>' +
+            '</li>'
+            );
+    };
+
+    var getPastMessages = function () {
+        socket.get('/statusupdate?chatroom_id=' + chatroom_id, function (statusupdates) {
+            for (var i = 0, len = statusupdates.length; i < len; i++) {
+                renderMessage(statusupdates[i]);
+            }
+        });
+    };
+
+
+
+
+    /**
+     * Set Event Listeners
+     */
+
+    $(the_form).submit( function (event)
+    {
+        event.preventDefault();
+        submitStatusUpdate();
     });
-  };
 
-  getUsers();
+    /**
+     * Go!
+     */
 
+    // socket.request('/statusupdate');
+
+    getPastMessages();
+
+    socket.on('message', function (socket_message) {
+        console.info('socket.on statusupdate');
+
+        if (socket_message)
+        {
+            if (socket_message.data)
+            {
+                renderMessage(socket_message.data);
+            }
+        }
+    });
 
 })(jQuery);
+}

@@ -1,11 +1,9 @@
 
 $(document).ready(function(){ 
-
-  $(".fc-day").click(function(){
+console.log('ready');
+  $(".fc-widget-content").dblclick(function(){
        
- var D = $(this).attr('data-date');
-   
-   document.getElementById("date").value = D ;
+console.log('clikééééé');
   document.getElementById('light').style.display='block';
   document.getElementById('fade').style.display='block';
    });
@@ -24,4 +22,11 @@ $(document).ready(function(){
 
 d = new Date("Thu May 29 2016 02:00:00 GMT+0200 (Paris, Madrid (heure d’été))");
 d.yyyymmdd();
+
+
+
+
+
+
+
 });

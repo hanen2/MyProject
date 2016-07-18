@@ -1,116 +1,139 @@
 <% if (req.session.User) {%>
+<head>
+
+    <style>
+    .edit{
+         width: 850px;
+    }
+    .black_overlay{
+        display: none;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        z-index:1001;
+        -moz-opacity: 0.8;
+        opacity:.80;
+        filter: alpha(opacity=80);
+    }
+    .white_content {
+        display: none;
+        position: absolute;
+        top: 35%;
+        left: 20%;
+        width: 480px;
+        height: 350px;
+        
+        border: none;
+        background-color: white;
+        z-index:1002;
+        overflow: auto;
+    }
+</style>
+</head>
+  <script src="/js/dependencies/jquery.js"></script>
 <script type="text/javascript">
 
 
+function showDivPassw(){
 
+ document.getElementById('light').style.display='block';
+  document.getElementById('formPassword').style.display='block';
+} 
+
+$(function(){
+        $("#submit").click(function(){
+        $(".error").hide();
+        var hasError = false;
+        var passwordVal = $("#password").val();
+        var checkVal = $("#password-check").val();
+        if (passwordVal == '') {
+            $("#password").after('<span class="error">Please enter a password.</span>');
+            hasError = true;
+        } else if (checkVal == '') {
+            $("#password-check").after('<span class="error">Please re-enter your password.</span>');
+            hasError = true;
+        } else if (passwordVal != checkVal ) {
+            $("#password-check").after('<span class="error">Passwords do not match.</span>');
+            hasError = true;
+        }
+        if(hasError == true) {return false;}
+    });
+});
 
 </script>
- <div id="main-wrapper">
-
-    <link rel="stylesheet" href="/css/font-icons/entypo/css/entypo.css">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
-    <link rel="stylesheet" href="/css/neon.css">
-    <link href="/plugins/bootstrap-datepicker/css/datepicker3.css" rel="stylesheet" type="text/css"/>
-
-
-
-
-<div class="page-body" >
-
-<div class="profile-env">
-    
-    <header class="row">
-        
-        <div class="col-sm-2">
-            
-            <a href="#" class="profile-picture">
-                <img src="/images/avatar4.png" class="img-responsive img-circle" />
-            </a>
-                <form id="uploadForm" enctype="multipart/form-data" action="/upload" method="post">
-                       <input type="file" name="uploadFile" />
-                       <input type="submit" value="submit"/>
-               
-                  </form>
-        </div>
-        
-        <div class="col-sm-7">
-            
-            <ul class="profile-info-sections">
-                <li>
-                    <div class="profile-name">
-                        <strong>
-                            <a href="#"> <%=session.User.FirstName%> <%=session.User.LastName%></a>
-                            <a href="#" class="user-status is-online tooltip-primary" data-toggle="tooltip" data-placement="top" data-original-title="Online"></a>
-                            <!-- User statuses available classes "is-online", "is-offline", "is-idle", "is-busy" -->                        </strong>
-                        <span><a href="#"><%=session.User.job%> in <%=session.User.soc%></a></span>
-                    </div>
-                </li>
-                
-              
-            
-            </ul>
-            
-        </div>
-        
-        <div class="col-sm-3">
-            
-            <div class="profile-buttons">
-            Send Message
-                <a href="#" class="btn btn-default">
-                    <i class="entypo-mail"></i>
-                </a>
-            </div>
-        </div>
-        
-    </header>
-    
-    <section class="profile-info-tabs">
-        
-        <div class="row">
-            
-            <div class="col-sm-offset-2 col-sm-10">
-                
-                <ul class="user-details">
-                    <li>
-                       
-                            <i class="entypo-location"></i>
-                            Tunisie, Sfax
-                        
-                    </li>
-                    
-                    <li>
-                        <a href="#">
-                            <i class="entypo-suitcase"></i>
-                            Works as <span><%=session.User.job%></span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="#">
-                            <i class="entypo-calendar"></i>
-                            16 October
-                        </a>
-                    </li>
-                </ul>
-                
-                
-                <!-- tabs for the profile links -->
-                <ul class="nav nav-tabs">
-                    <li ><a href="/profil">Profile</a></li>
-                    <li class="active"><a href="/editProfil" >Edit Profile</a></li>
-                </ul>
-                
-            </div>
-            
-        </div>
-        
-    </section>
-   
-    <section class="profile-feed">
-                        
-                        <div class="col-md-12">
+<div id="formPassword"  class="black_overlay"> </div>
+  <div id="light" class="white_content">
+<div class="col-md-6">
                             <div class="panel panel-white">
-                                <div class="panel-body">
+                                <div class="panel-heading clearfix">
+                                    <h4 class="panel-title">Edit Password </h4>
+                                </div>
+ <div class="panel-body">
+  <form class="form-horizontal" name="form1" id="form-password" method="POST" action ="/EditPassw">
+      
+           <fieldset>
+    <label>Past Password:</label>
+    <input type="password" name="Lastpassword" id="Lastpassword" value="" size="32" />
+    <label>New Password:</label>
+    <input type="password" name="password" id="password" value="" size="32" />
+    <label>Re-Enter Password:</label>
+    <input type="password" name="password-check" id="password-check" value="" size="32" />
+  
+        
+  </fieldset>
+           <br> <div class="form-group">
+               <div class="col-sm-offset-2 col-sm-10">
+                  
+                 <span> <input type="submit" value="Save" class="btn btn-success"  id="submit">
+                  <input value="Cancel"  class="btn btn-danger"  onclick = "document.getElementById('light').style.display='none';document.getElementById('formPassword').style.display='none'"> </span>
+               </div>
+                             
+          </div>                             
+          
+  </form>
+                                </div>
+                            </div>
+                        </div>
+    </div>
+
+
+   <script src="/js/dependencies/jquery.js"></script>
+    <script src="/js/jquery-1.11.0.min.js"></script>
+     <div class="profile-cover">
+                    <div class="row">
+                        <div class="col-md-3 profile-image">
+                            <div class="profile-image-container">
+                                <img src='<%=session.User.avatarFd%>' alt="">
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                <div id="main-wrapper">
+                    <div class="row">
+                        <div class="col-md-3 user-profile">
+                            <h3 class="text-center"><%=session.User.FirstName%> <%=session.User.LastName%></h3>
+                            <%if (req.session.User.job){ %>
+                            <p class="text-center"> <%=session.User.job%> <%if (req.session.User.soc){%> in <%=session.User.soc %>  <%}%></p>
+                            <%}%>
+                            <hr>
+                            <ul class="list-unstyled text-center">
+                                <li><p><i class="fa fa-map-marker m-r-xs"></i>Tunisie, Sfax</p></li>
+                                <li><p><i class="fa fa-envelope m-r-xs"></i><a href="#"><%=session.User.email%></a></p></li>
+                                
+                            </ul>
+                            <hr>
+                           <a href="/profil"> <button class="btn btn-primary btn-block"><i class=" m-r-xs"></i>My Profil</button></a> 
+                        </div>
+                   <div class="col-md-6 ">    
+     <section class="profile-feed">
+                        
+                        <div class="col-md-12 edit">
+                            <div class="panel ">
+                                <div >
                                     <div id="rootwizard">
                                         <ul class="nav nav-tabs" role="tablist">
                                             <li role="presentation" class="active"><a href="#tab1" data-toggle="tab"><i class="fa fa-user m-r-xs"></i>Personal Info</a></li>
@@ -152,8 +175,10 @@
                                                                     <input type="email" class="form-control" name="exampleInputEmail" id="exampleInputEmail" value='<%=session.User.email%>' >
                                                                 </div>
                                                                 <div class="form-group col-md-12">
+                                                                    <div class="fa-item col-md-3 col-sm-4"><i class="fa fa-edit"></i><a href=""  id="exampleInputPassword1" onClick="showDivPassw()"> Edit Password ? </a>
+                                                                        </div>
                                                                     
-                                                                    <input type="hidden" class="form-control" name="exampleInputPassword1" id="exampleInputPassword1" value='<%=session.User.password%>' >
+
                                                                 </div>
                                                                
                                                             </div>
@@ -171,13 +196,10 @@
                                                         </div>
                                                         <div class="col-md-9">
                                                             <div class="form-group col-md-12">
-                                                                <label for="exampleInputProductName">My job</label>
+                                                                <label for="exampleInputProductName">Grade</label>
                                                                 <input type="text" class="form-control" name="job" id="job" value='<%=session.User.job%>' >
                                                             </div>
-                                                             <div class="form-group col-md-12">
-                                                                <label for="exampleInputProductName">Soc</label>
-                                                                <input type="text" class="form-control" name="soc" id="soc" value='<%=session.User.soc%>' >
-                                                            </div>
+                                                       
                                                          
                                                             <div class="form-group col-md-12">
                                                                 <label for="phone">Phone</label>
@@ -213,21 +235,23 @@
        
                         </div>
     </section>
-
-    
-    
-</div>
-
+    </div>      
+                </div>
+   
+               
     <!-- Bottom Scripts -->
+    <script src="/js/gsap/main-gsap.js"></script>
+
+    <script src="/js/joinable.js"></script>
+    <script src="/js/resizeable.js"></script>
   
 
-        
-</div>
-
-       <div class="row">
+                    <div class="row">
+                    
                     </div><!-- Row -->
-                </div><!-- Main Wrapper -->
+                <!-- Main Wrapper -->
                 <div class="page-footer">
-                    <p class="no-s">2016 &copy; Hanen Hamroun </p>
+                    <p class="no-s">2016 &copy; Hanen Hamroun</p>
                 </div>
+
 <% } %>

@@ -4,23 +4,24 @@
  * @description :: Server-side logic for managing users
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
-
+var bcrypt = require('bcryptjs');
 module.exports = {
 
 
 
-    index: function(req, res, next) {
+    /*index: function(req, res, next) {
 
-    // Get an array of all users in the User collection(e.g. table)
-    User.find(function foundUsers(err, users) {
+   
+    User.find(function foundusers(err, users) {
       if (err) return next(err);
       // pass the array down to the /views/index.ejs page
       res.view({
         users: users
       });
     });
-  },
+  },*/
   signup: function (req, res) {
+
 
     // Attempt to signup a user using the provided parameters
     var data = {
@@ -46,9 +47,44 @@ module.exports = {
       }
       req.session.success ='Signup successful!';
      console.log( user  );
-    
-      return res.redirect('/');
+    User.publishCreate(user);
+
+// create all PrivateChat
+    User.find(function foundusers(err, all) {
+      if (err) return next(err);
+else {
+
+//console.log(all)
+_.each(all, function(owner) { 
+
+PrivateChat.CreateChat( {owner , user} ,function(error,chat){
+     if (error ) {console.log('errr creation privatechat')}
+      else {
+         console.log(chat);
+       chat.owners.add([owner.id , user.id]) ;
+console.log(owner.id) ;
+  chat.save(function(err) {});
+      }
+     
+  
+              } );
+  });
+}
+
     });
+    
+   res.redirect('/AllUsers');
+User.publishCreate({ id : user.id,
+ email : user.email ,
+  username : user.username , 
+  FirstName : user.FirstName , 
+  LastName : user.LastName , 
+  password : user.password  })
+           
+    });
+
+
+    
   },
 
 
@@ -152,8 +188,7 @@ User.update({id: req.session.User.id },
       LastName: req.param('LastName'),
       username: req.param('username'),
       job: req.param('job'),
-      phone: req.param('phone'),
-      soc: req.param('soc')}, function(err, users) {
+      phone: req.param('phone')}, function(err, users) {
 // Error handling
 if (err) {
 return console.log(err);
@@ -166,43 +201,31 @@ return console.log(err);
 }
 });
 
-
-
 },
- 
-
 
 findUser : function(req,res){ 
 
-
 User.findOne({
-  id :req.query.id
+  id :req.params['id']
 }).exec(function (err, foundUser){
   if (err) {
     console.log('errr');
   }
   if (!foundUser) {
     console.log('Could not find foundUser, sorry.');
+    res.redirect('/search')
   }
 
-req.session.UserProfil=foundUser;
- res.redirect('/UserProfil');
-
-
-  
+else {
+  req.session.UserProfil=foundUser;
+ res.redirect('/UserProfil/'+ foundUser.id); 
+}
 
 });
-},
 
-  showAll: function( res) {
-    User.find(function foundUser(err, users) {
-      if (err) return res.serverError(err);
-      if (!users) res.serverError(err); //('User doesn\'t exist.');
-       User.publishCreate({id: users.id});
-      
-     
-    });
-  }, 
+
+},
+ 
 
   //delete user for admin 
    destroy: function (req, res) {
@@ -215,31 +238,82 @@ req.session.UserProfil=foundUser;
       User.destroy(req.param('id'), function userDestroyed(err) {
         if (err) return res.serverError(err);
       });
-
-      res.redirect('/user/index');
+      
+  /* User.publishUpdate(users[0].id, {  
+            onLine: false ,
+             FirstName : users[0].FirstName , 
+              LastName : users[0].LastName ,
+               avatarFd : users[0].avatarFd }, req);*/
+      res.redirect('/AllUsers');
 
     });
   },
+
+  EditPassw : function(req,res){
+
+    var lastpassword =req.param('Lastpassword') ;
+    var newPassword =req.param('password') ;
+
+    var salt = bcrypt.genSaltSync(10);
+
+    bcrypt.compare(lastpassword, req.session.User.password, function(err, valid) {
+        if (err) return next(err);
+
+        // If the password from the form doesn't match the password from the database...
+        if (!valid) {
+        
+          console.log('mahomch egaux') ;
+        }
+        if (valid ){
+          console.log('gad gad');
+         
+          console.log(req.session.User.password) ;
+           bcrypt.hash(newPassword, salt, function (err, hashnew) {
+            User.update({id: req.session.User.id}).set({ password: hashnew })
+                .exec(function(err, users){
+                    if (err) console.log(err);
+                    
+              console.log('password Updated');
+              
+                res.redirect('/editProfil');
+                     });
+
+              });
+        }
+
+    
+});
+
+
+
+ 
+
+  },
     subscribe: function(req, res) {
  
+
+ if (!req.isSocket) { console.log('it is not socket request ') ;}
     // Find all current users in the user model
-    User.find(function foundUsers(err, users) {
+   else {
+
+     User.find(function foundUsers(err, users) {
       if (err) return next(err);
  
       // subscribe this socket to the User model classroom
-      User.subscribe(req.socket);
- 
+     // User.subscribe(req.socket);
+
+
+  
       // subscribe this socket to the user instance rooms
-      User.subscribe(req.socket, users);
- 
+     User.subscribe(req.socket,users);
+     //console.log('hahom lkoll');
       // This will avoid a warning from the socket for trying to render
       // html over the socket.
       res.send(200);
     });
+
+   } 
   }
-
-
-
 
 };
 

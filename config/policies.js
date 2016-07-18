@@ -22,8 +22,12 @@
 
   module.exports.policies = {
 
-   '*':  true
+   
+user: {
+		
+		subscribe: ["flash", "isAuthenticated"],
 
+	}
 	
 };
 

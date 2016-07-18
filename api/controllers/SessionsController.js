@@ -37,38 +37,70 @@ login: function(req, res) {
         }).exec(function (err, user) {
 
             // Account not found
-            if (err || !user) {
-                return res.send('Invalid email and password combination!', 500);
-            }
+            
+            
+                  if (!user) {
+        var noAccountError = [{
+          name: 'noAccount',
+          message: 'The email address ' + req.param('email') + ' not found.'
+        }]
+        req.session.flash = {
+          err: noAccountError
+        }
+        res.redirect('/');
+        return;
+      }
+            
 
             // Compare the passwords
             bcrypt.compare(password, user.password, function(err, valid) {
-                if(err || !valid) { 
-                  return res.send('Invalid email and password combination!', 500) ;
-              req.session.err='Invalid email and password combination' ;
-                }
+                if(err ) return next(err); 
+                
+                  if (!valid) {
+          var usernamePasswordMismatchError = [{
+            name: 'usernamePasswordMismatch',
+            message: 'Invalid username and password combination.'
+          }]
+          req.session.flash = {
+            err: usernamePasswordMismatchError
+          }
+          res.redirect('/');
+          return;
+        }
+
                    
 
                 // The user has authenticated successfully, set their session
                 req.session.authenticated = true;
                 req.session.User = user ;
                 req.session.err=null;
-                Sessions.changeEtatToTrue(user.id);
+              //  Sessions.changeEtatToTrue(user.id);
 
-                 User.publishUpdate(user.id, {
-                         loggedIn: true,
-                        id: user.id,
-                        username: user.username,
-                        action: ' has logged in.'
-                                  });
-                    
-    Sessions.create({id : req.session.User.id  , userLog :  req.session.User }).exec(function(error,users){
+                User.update({id: req.session.User.id}).set({ onLine: true ,hasRoom : false  })
+                .exec(function(err, users){
+                  req.session.User.hasRoom =false ;
+                    if (err) console.log(err);
+                       console.log(users[0].onLine);
+ 
+               //sails.sockets.broadcast('userList', { user: users.username });
+
+           User.publishUpdate(users[0].id, {  
+            onLine: true ,
+            idUser : users[0].id,
+             FirstName : users[0].FirstName , 
+              LastName : users[0].LastName ,
+               avatarFd : users[0].avatarFd }, req);
+
+                           //return res.ok();
+                     });
+
+ 
+ /*   Sessions.create({id : req.session.User.id  , userLog :  req.session.User }).exec(function(error,users){
                     console.log( users  );
                   
                   Sessions.publishCreate( { id: users.id  , username: users.username });
-                });
+                });*/
 
-                // Redirect to protected area
                 return res.redirect('/welcome');
             });
         });
@@ -80,11 +112,23 @@ login: function(req, res) {
     logout: function (req, res) {
 
 
-    req.session.err=null;
-      Sessions.changeEtatToFalse(req.session.User.id);
+   User.update({id: req.session.User.id}).set({ onLine: false }) .exec(function(err, users){
+                 
+                    if (err) console.log(err);
+                       console.log(users[0].onLine);
+ 
+               
+          User.publishUpdate(users[0].id, {  
+            onLine: false ,
+             FirstName : users[0].FirstName , 
+              LastName : users[0].LastName ,
+               avatarFd : users[0].avatarFd }, req);
+
+                           //return res.ok();
+                     });
 
               
-    Sessions.findOne( req.session.User.id , function foundUser (err, user) {
+ /*   Sessions.findOne( req.session.User.id , function foundUser (err, user) {
       if (err) return res.serverError(err);
 
       if (!user) res.serverError(err); //('User doesn\'t exist.');
@@ -92,15 +136,10 @@ login: function(req, res) {
       Sessions.destroy(user.id, function userDestroyed(err) {
         if (err) return res.serverError(err);
       });
-   User.publishUpdate(user.id, {
-                         loggedIn: false,
-                        id: user.id,
-                        username: user.username,
-                        action: ' has logged in.'
-                                  });
+  
 
     });
-
+*/
  
  req.session.User = null;
 

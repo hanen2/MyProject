@@ -1,0 +1,38 @@
+
+<% if (req.session.User){%>
+<% if(req.session.User.username=='admin'){ %>
+
+
+<div class="panel panel-white">
+                                <div class="panel-heading clearfix">
+                                    <h3 class="panel-title">All users </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                            <a href="/AddNewUser"> Add new </a>
+                                                <tr>
+                                                   
+                                                    <th>Status</th>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Username</th>
+                                                    <th>Email</th>
+                                                    <th> </th>
+                                                    <th> </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id ='allUsers'>
+                                              
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+<% }%>
+<% }%>

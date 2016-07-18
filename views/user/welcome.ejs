@@ -1,80 +1,199 @@
-<% if (req.session.User) {%>
+<%if(req.session.User){%>
 
+<input type="hidden" id ="NameUser" value='<%=session.User.FirstName %> <%=session.User.LastName%>'>
+           
 
-<body  > 
-
-
-<div id="main-wrapper">
-                    <div class="row" >
-                       <div ng-repeat="event in EventList ">
-
-                           <div class="col-lg-3 col-md-6">
-                            <div class="panel info-box panel-white">
-                                <div class="panel-body ">
-                                    <div class="info-box-stats">
-                                        <p class="counter">{{event.titleEvent}} 
-                                     By {{event.creator}}</p>
-                                       
-                                        <span class="info-box-title">
-                                 
-                                            <div id ="time"> <b> in 3 days</b></div> </span>
-                                    </div>
-                                       <div class="info-box-icon">
-                                     <i>    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></i>
-                                    </div>
-                                     <div class="panel-body ">
-                                    <div class="info-box-stats">
-                                       <span class="info-box-title">  
-                                         {{ event.Description }} 
-                                       
-                                    </span>
-                                    </div>
-
-                                  
-                                            </div>
-                                 
-
-                                    <div class="info-box-progress">
-                                        <div class="progress progress-xs progress-squared bs-n">
-                                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                            </div>
+                <div class="page-title">
+                    <h3>Welcome !</h3>
+                 <%if(req.session.User.username == 'admin'){%> <h4> you are logged as super user</h4> <%}%>
+                </div>
+                <div id="main-wrapper">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-8">
+                          
+                      
+                            <div class="panel panel-white">
+                                <div class="panel-heading clearfix">
+                                    <h4 class="panel-title">All posts</h4>
+                                </div>
+                                    <div class="panel-body slimscroll">
+                                    <div class="post">
+                                        <textarea class="form-control" placeholder="Post" id="new-post"rows="4=6"></textarea>
+                                        <div class="post-options">
+                                          <input id="id" class="form-control" type="hidden" value='<%=session.User.id%>'/>
+                                          <input id="Name1" class="form-control" type="hidden" value='<%=session.User.FirstName%>'/>
+                                <input id="Name2" class="form-control" type="hidden" value='<%=session.User.LastName%>' />
+                                            <button id="sendBtn" class="btn btn-default pull-right">Post</button>
                                         </div>
+                                    </div>
+                                    <div id="post"class="panel-body slimscroll">
+                                 
+                                   
+                                
+                                   
+                                </div>
+                                </div>
+                                
+                                
+                            </div>
+                         
+                        </div>
+                            <div class="col-sm-12 col-lg-4">
+                            <div class="panel panel-white" >
+  
+
+          <div class="panel-heading">
+                                    <h4 class="panel-title"> Start new Chat Room</h4>
+                                  
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+  
+        
+                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Start now !</button>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title" id="myModalLabel">New Chat Room</h4>
+                                                        </div>
+                                                    <form method="POST" action="/newRoom"> 
+                                                        <div class="modal-body">
+                                                         
+         <div class="form-group">
+            <label class="col-sm-2 control-label">Title </label>
+            <div class="col-sm-10">
+             <input type="text" class="form-control" name ="nameRoom" placeholder="Title">
+          
+            </div>
+          </div>
+          <div class="form-group">
+             <label for="inputPassword3" class="col-sm-2 control-label">Description</label> <br><br>
+             <div class="col-sm-10">
+                 <textarea rows="4" cols="50" name="descRoom"></textarea>
+             </div>
+          </div>
+         
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-success">Create</button>
+                 </div>
+         
+       
+                                                        </div>
+                                                    
+                                                    </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+           
+
+
+     
+
+                    </div>
+                                </div>
+                              
+                            </div>
+                            
+                        </div>
+                        <div class="col-sm-12 col-lg-4">
+                            <div class="panel panel-white">
+                                <div class="panel-heading clearfix">
+                                    <h4 class="panel-title">Currents Chat Rooms</h4>
+                                    <div class="panel-control">
+                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" class="panel-collapse" data-original-title="Expand/Collapse"><i class="icon-arrow-down"></i></a>
+                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" class="panel-reload" data-original-title="Reload"><i class="icon-reload"></i></a>
+                                        
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                   <div class="inbox-widget slimscroll" id="roomList">
+                                     
+                             
+
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel panel-white">
+                                <div class="panel-heading clearfix">
+                                    <h4 class="panel-title">Events to come</h4>
+                                    <div class="panel-control">
+                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" class="panel-collapse" data-original-title="Expand/Collapse"><i class="icon-arrow-down"></i></a>
+                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" class="panel-reload" data-original-title="Reload"><i class="icon-reload"></i></a>
+                                       
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                   
+                                        <li ng-repeat="event in EventList ">{{event.titleEvent}} 
+                                     By {{event.creator}}</li>
+                                  
+                                </div>
+                            </div>
+                            <div class="panel panel-white">
+                                <div class="panel-heading clearfix">
+                                    <h4 class="panel-title">ZetaCos infromations</h4>
+                                  
+                                </div>
+                                <div class="panel-body">
+                                  <div class="col-md-6">
+                                            <h3>Address</h3>
+                                            <address>
+
+                                                <strong>Cyber parc de Médenine 4119, Tunisie</strong><br>
+                                                
+                                               Tunisie : +216 26 141 731<br>
+                                               France : +33(0)6 46 84 70 87<br>
+                                                
+                                            </address>
+                                            <address>
+                                                <strong>Email</strong><br>
+                                                <a href="mailto:#">info@zetacos.com</a>
+                                            </address>
+                                        </div>
+                                </div>
+                            </div>
+                          
+                          
                         </div>
-
-                        </div>
-                   
-                      
-                     
-                    </div><!-- Row -->
-                   
-
-<div class="row" id="chat">
-  <div id="messages" class="col-xs-10"></div>
-  <div id="users" class="col-xs-2">
-    <p class="lead">Users</p>
-    <ul>    </ul>
-  </div>
-</div>
-
-<div class="row" id="message-entry">
-  <div class="col-xs-11">
-    <input id="new-message" class="form-control" type="text" name="new-message" />
-  </div>
-  <div class="col-xs-1">
-    <button id="send-message" class="btn btn-default">Send</button>
-  </div>
-</div>
-
-
+                    </div>
                 </div><!-- Main Wrapper -->
-
-
-
-<div class="page-footer">
-                    <p class="no-s">2015 © Modern by Steelcoders.</p>
+                <div class="page-footer">
+                    <p class="no-s">2016 &copy; Hanen Hamroun</p>
                 </div>
-</body>
-<% } %>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title" id="myModalLabel">Edit Post</h4>
+                                                        </div>
+                                                    <form method="POST" action="/newRoom"> 
+                                                        <div class="modal-body">
+                                                         
+
+          <div>
+             <label for="inputPassword3" class="col-sm-2 control-label">Description</label> <br><br>
+             <div class="col-sm-10">
+                 <textarea rows="4" cols="50" id="postcontent" name="postcontent"></textarea>
+             </div>
+          </div>
+          </div>
+         <br><br><br><br><br>
+              <div class="modal-footer" style="">
+                <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-success" id="savebtn" >Save</button>
+                 </div>
+         
+       
+                                                        </div>
+                                                    
+                                                    </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                <%}%>

@@ -37,6 +37,12 @@ schema: true,
       defaultsTo : false 
     
     },
+
+      hasRoom : {
+      type: 'boolean' ,
+      defaultsTo : false 
+    
+    },
    
      avatarFd : {
       type :'string',
@@ -57,7 +63,19 @@ schema: true,
     },
     desc :{
       type : 'text'
-    }
+    },
+    RoomUsers :{
+      model : 'room'
+    },
+
+    PrivateChats: {
+      collection: 'PrivateChat',
+      via: 'owners'
+  
+    },
+
+      pubs: { collection: 'Pub', via : 'PostUser' }
+  
 
   },
 

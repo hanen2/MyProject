@@ -1,0 +1,59 @@
+<% if (req.session.User) {%>
+
+
+<body > 
+  <div class="page-title">
+<h1 style="margin: 3% ;font-size:200%;width:50%" > <%=session.Room.title%> </h1>
+</div>
+<div id="finish" style="margin-left:3%" > <%if(req.session.Room.creatorId === req.session.User.id) {%>  <a href="/finish/<%=session.Room.id %>" class="btn btn-danger"> End this Room</a> <%} else { %>
+ <a href="/leave/<%=session.Room.id %>" class="btn btn-danger"> Leave this Room</a> <%}%>
+</div>
+<div id="main-wrapper">            
+
+<div class="row" id="chat">
+  <div id="messages" class="col-xs-10" style="background-color:#fff;padding:2%">
+<%if(req.session.msgRoom){ %>
+ <% for(var i = 0 ; i< req.session.msgRoom.length ; i++ ) {%>
+     <%=session.msgRoom[i].from%> :  <%=session.msgRoom[i].body%> <br>
+      <%}}%>
+  
+  </div>
+  <div  class="col-xs-2" style="">
+    <p class="lead">Users</p>
+   <%if(req.session.usersRoom){ %>
+  <ul class="list-group">   <% for(var i = 0 ; i< req.session.usersRoom.length ; i++ ) {%>
+      <li class="list-group-item list-group-item-info"><%=session.usersRoom[i].FirstName%>  <%=session.usersRoom[i].LastName%> </li> 
+      <%}}%>
+
+<div id="usersInRoom">  </div>
+       </ul>
+  </div>
+  
+      <div class="row" id="message-entry" style="width:90% ;margin-top:15%;position:relative" >
+  <div class="col-xs-11" style="width:80%">
+    <input id="new" class="form-control" type="text" name="new" />  
+     <input id="Name1" class="form-control" type="hidden" value='<%=session.User.FirstName%>'/>
+     <input id="Name2" class="form-control" type="hidden" value='<%=session.User.LastName%>' />
+     <input type="hidden" id="UserName" value='<%=session.User.FirstName%> <%=session.User.LastName%>'>
+      <input id="id_room" class="form-control" type="hidden" value='<%=req.params['id']%>' />
+  </div>
+  <div class="col-xs-1">
+    <button id="send-message" class="btn btn-default">Send</button>
+  </div>
+</div>
+</div>
+
+
+
+
+                </div><!-- Main Wrapper -->
+
+
+
+<div class="page-footer">
+                    <p class="no-s">2015 © Modern by Steelcoders.</p>
+                </div>
+</body>
+
+<% } %>
+

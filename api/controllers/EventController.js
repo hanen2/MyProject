@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-
+/*
     index: function(req, res, next) {
 
    
@@ -17,13 +17,13 @@ module.exports = {
         events: events
       });
     });
-  },
+  },*/
 
 newEvent : function  (req,res) {
   var title=req.param('title');
   var description =req.param('description');
   var date =req.param('date');
-    Event.create({ creator : req.session.User.username ,
+    Event.create({ creator : req.session.User.FirstName +' '+req.session.User.LastName  ,
       titleEvent: title , 
       	Description: description ,
     	 date :date})

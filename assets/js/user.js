@@ -6,7 +6,7 @@ $(function() {
   var opt = $('option[value="'+$(this).val()+'"]');
     console.log(opt.attr('id'));
 	
-		 window.location.href='http://localhost:1337/user?id='+opt.attr('id');
+		 window.location.href='http://localhost:1337/profil/'+opt.attr('id');
 		}
 	
   });

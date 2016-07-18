@@ -1,0 +1,53 @@
+<% if (req.session.User) {%>
+
+
+
+<body> 
+<div id="maindiv" style="margin-left:2%">
+<h1> <%=session.Room.title%> </h1>
+<div id="finish"> <%if(req.session.Room.creatorId === req.session.User.id) {%>  <a href="/finish/<%=session.Room.id %>" class="btn btn-danger "> Finish this Room</a> <%} else { %>
+ <a href="/leave/<%=session.Room.id %>"> Leave this Room</a> <%}%>
+</div>
+<div id="main-wrapper">            
+
+<div class="row" id="chat" style="width:16% ; background-color:#FFF">
+  <div id="messages" class="col-xs-10">
+<%if(req.session.msgRoom){ %>
+ <% for(var i = 0 ; i< req.session.msgRoom.length ; i++ ) {%>
+     <%=session.msgRoom[i].from%> :  <%=session.msgRoom[i].body%> <br>
+      <%}}%>
+  </div>
+  <div id="usersInRoom" class="col-xs-2"  style="float:left;margin-right:22%">
+    <p class="lead">Users</p>
+   <%if(req.session.usersRoom){ %>
+  <ul>   <% for(var i = 0 ; i< req.session.usersRoom.length ; i++ ) {%>
+      <li><%=session.usersRoom[i].FirstName%> </li> 
+      <%}}%> </ul>
+  </div>
+</div>
+
+<div class="row" id="message-entry" style="margin-top:2% ;clear:right;width:75%;">
+  <div class="col-xs-11">
+    <input id="new" class="form-control" type="text" name="new" />  
+     <input id="Name1" class="form-control" type="hidden" value='<%=session.User.FirstName%>'/>
+     <input id="Name2" class="form-control" type="hidden" value='<%=session.User.LastName%>' />
+     <input type="hidden" id="UserName" value='<%=session.User.FirstName%> <%=session.User.LastName%>'>
+      <input id="id_room" class="form-control" type="hidden" value='<%=req.params['id']%>' />
+  </div>
+  <div class="col-xs-1">
+    <button id="send-message" class="btn btn-default">Send</button>
+  </div>
+</div>
+</div>
+
+                </div><!-- Main Wrapper -->
+
+
+
+<div class="page-footer">
+                    <p class="no-s">2015 © Modern by Steelcoders.</p>
+                </div>
+</body>
+
+<% } %>
+

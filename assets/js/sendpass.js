@@ -1,0 +1,2 @@
+
+	var pass = $('#password').val();
